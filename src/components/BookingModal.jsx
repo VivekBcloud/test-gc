@@ -98,7 +98,7 @@ const HotelBookingModal = ({ roomDetails, hotelName = "" }) => {
                     onClick={closeModal}
                     className="  text-gray-600 hover:text-gray-800"
                   >
-                    <CloseIcon size={10} />
+                    <CloseIcon size={5} />
                   </button>
                 </div>
               </div>

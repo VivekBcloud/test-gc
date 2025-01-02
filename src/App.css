@@ -1,0 +1,14 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+.base-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  font-family: "inter", serif;
+}
+
+.card {
+  padding: 2em;
+}

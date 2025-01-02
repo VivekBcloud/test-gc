@@ -2,6 +2,11 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router";
 import { fetchHotelDetails } from "../services";
 import RoomCards from "../components/RoomCards";
+import {
+  ArrowLongLeftIcon,
+  LocationIcon,
+  SolidStarIcon,
+} from "../components/SvgIcons";
 
 const HotelDetails = () => {
   const { hotelId } = useParams();
@@ -23,31 +28,47 @@ const HotelDetails = () => {
   return (
     <div>
       <div
-        className="py-20 "
+        className="relative py-28 mb-8"
         style={{
-          background: `url(${details?.image_url})`,
+          backgroundImage: `url(${details?.image_url})`,
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
           backgroundSize: "cover",
         }}
       >
-        <Link to="/">
-          <div className="flex items-center justify-center w-10 h-10 bg-blue-400 rounded-full text-white">
-            {"<"}
-          </div>
-        </Link>
-        <div className="flex flex-row items-center justify-center">
-          <h2>{details?.name}</h2>
-          <div>
-            <div>{details?.city}</div>
-            <div>{details?.rating}</div>
+        <div className="absolute inset-0 bg-black opacity-60 iso"></div>
+        <div className="isolate">
+          <Link to="/" className="absolute left-0 top-0 p-4">
+            <div className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-60 rounded-full text-blue-500 hover:bg-opacity-80 transition-all">
+              <ArrowLongLeftIcon />
+            </div>
+          </Link>
+          <div className="flex flex-col gap-2 items-center justify-center text-white">
+            <div className="text-4xl">{details?.name}</div>
+            <div className="flex gap-2 mt-4">
+              <div className="flex gap-1 items-center text-sm">
+                <LocationIcon size={5} />
+                {details?.city}
+              </div>
+              <div className="flex gap-1 items-center">
+                <SolidStarIcon size={4} />
+                <span className="text-sm">{details?.rating}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 p-4">
         {details?.rooms?.map((room) => (
-          <RoomCards key={room?.id} roomDetails={room} />
+          <RoomCards
+            key={room?.id}
+            roomDetails={room}
+            hotelName={details?.name}
+          />
         ))}
+      </div>
+      <div className="p-4">
+        <div className="text-xl py-4">About the {details?.name}</div>
+        <p className="text-sm leading-[22px]">{details?.description}</p>
       </div>
     </div>
   );

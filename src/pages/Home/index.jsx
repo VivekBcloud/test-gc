@@ -233,7 +233,7 @@ const Home = () => {
       </div>
       <div>
         <h2 className="py-4 text-center text-2xl">Explore Hotels</h2>
-        <section className="grid grid-cols-[16rem_auto] ">
+        <section className="grid sm:grid-cols-[16rem_auto] ">
           <div className="p-4">
             <div className="flex justify-between items-center pb-2">
               <div className="text-2xl">Filters</div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { ArrowLongRightIcon, SolidStartIcon } from "./SvgIcons";
+import { ArrowLongRightIcon, SolidStarIcon } from "./SvgIcons";
 
 const HotelCards = ({ details }) => {
   return (
@@ -14,7 +14,7 @@ const HotelCards = ({ details }) => {
         <div className="flex justify-between pt-2">
           <div>{details?.name}</div>
           <div className="flex items-center gap-1 text-xs ">
-            <SolidStartIcon />
+            <SolidStarIcon />
             <div>{details?.rating}</div>
           </div>
         </div>

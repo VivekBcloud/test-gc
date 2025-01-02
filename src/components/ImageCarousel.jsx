@@ -1,33 +1,25 @@
 import React, { useState } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "./SvgIcons";
 
 const ImageCarousel = ({ images = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const prevSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? images.length - 1 : prevIndex - 1
-      );
-      setIsAnimating(false);
-    }, 0); // Duration of the transition
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
   };
 
   const nextSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
-      setIsAnimating(false);
-    }, 0); // Duration of the transition
+    // Duration of the transition
+    setCurrentIndex((prevIndex) =>
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="max-w-md mx-auto  bg-white shadow-lg  overflow-hidden">
       <div className="relative">
         <div className="overflow-hidden">
           <div
@@ -48,15 +40,15 @@ const ImageCarousel = ({ images = [] }) => {
         </div>
         <button
           onClick={prevSlide}
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-600"
+          className="absolute top-1/2 left-1 transform -translate-y-1/2  text-white p-2 rounded-full hover:bg-white hover:text-black transition-all"
         >
-          &#9664;
+          <ChevronLeftIcon />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-600"
+          className="absolute top-1/2 right-1 transform -translate-y-1/2  text-white p-2 rounded-full hover:bg-white hover:text-black transition-all"
         >
-          &#9654;
+          <ChevronRightIcon />
         </button>
       </div>
     </div>

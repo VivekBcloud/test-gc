@@ -1,63 +1,94 @@
 import React, { useState } from "react";
+import { CloseIcon, DeleteIcon } from "./SvgIcons";
 
-const PersonDetails = () => {
-  const [personList, setPersonList] = useState([]);
-
-  const handleAdd = () => {
-    const newPerson = {
-      name: "",
-      age: "",
-    };
-    setPersonList([...personList, newPerson]);
-  };
-
-  const handleDelete = (person) => {
-    const updatedList = personList.filter((p) => person !== p);
-    setPersonList(updatedList);
-  };
-
-  const updatePersonData = (person, key, value) => {
-    const updatedList = personList.map((p) => {
-      if (p === person) {
-        return { ...p, [key]: value };
-      }
-      return p;
-    });
-    setPersonList(updatedList);
-  };
+const PersonDetails = ({
+  personList,
+  handlePersonAdd,
+  handlePersonDelete,
+  updatePersonData,
+}) => {
   return (
-    <div>
-      <div className="max-h-52 h-full overflow-y-scroll">
-        {personList.map((person) => (
-          <div key={person.id}>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={person.name}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-              onChange={(e) => {
-                updatePersonData(person, "name", e.target.value);
-              }}
-            />
-            <input
-              type="number"
-              value={person.age}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-              onChange={(e) => {
-                updatePersonData(person, "age", e.target.value);
-              }}
-            />
-            <button onClick={() => handleDelete(person)}>Delete</button>
+    <div className="h-full">
+      <div className="max-h-72 h-full overflow-y-scroll py-1">
+        {personList.map((person, idx) => (
+          <div className="py-4 text-sm" key={person.id}>
+            <div className="flex pb-4 text-sm font-medium text-gray-700">
+              Person {idx + 1}
+              {idx !== 0 && (
+                <button
+                  onClick={() => handlePersonDelete(person)}
+                  className="flex hover:bg-gray-200 ml-2"
+                >
+                  {"("}
+                  Remove
+                  <span>
+                    <CloseIcon />
+                  </span>
+                  {")"}
+                </button>
+              )}
+            </div>
+            <div className="px-4">
+              <input
+                id={`person-${person.id}`}
+                type="text"
+                required
+                placeholder="Name"
+                value={person.name}
+                className="w-full my-2 px-3 py-2 border border-gray-500 rounded focus:outline-none focus:ring focus:ring-gray-300"
+                onChange={(e) => {
+                  updatePersonData(person, "name", e.target.value);
+                }}
+              />
+              <div className="grid sm:grid-cols-2 ">
+                <input
+                  required
+                  type="number"
+                  value={person.age}
+                  placeholder="Age"
+                  className=" my-2 pl-2 py-2 border border-gray-500 rounded focus:outline-none focus:ring focus:ring-gray-300"
+                  onChange={(e) => {
+                    updatePersonData(person, "age", e.target.value);
+                  }}
+                />
+
+                {/* Gender Toggle */}
+                <div className="ml-auto flex items-center  rounded ">
+                  <button
+                    className={`px-4 py-2 border border-collapse border-gray-500 ${
+                      person?.gender === "Male"
+                        ? "bg-gray-500 text-white"
+                        : "bg-white"
+                    }`}
+                    onClick={() => updatePersonData(person, "gender", "Male")}
+                  >
+                    Male
+                  </button>
+                  <button
+                    className={`px-4 py-2 border border-collapse border-gray-500 ${
+                      person?.gender === "Female"
+                        ? "bg-gray-500 text-white"
+                        : "bg-white"
+                    }`}
+                    onClick={() => updatePersonData(person, "gender", "Female")}
+                  >
+                    Female
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
-      <button onClick={handleAdd}>Add Person</button>
+      <div className="text-right py-4">
+        <button
+          type="button"
+          className="text-blue-500 capitalize text-sm font-semibold"
+          onClick={handlePersonAdd}
+        >
+          + ADD PERSON
+        </button>
+      </div>
     </div>
   );
 };

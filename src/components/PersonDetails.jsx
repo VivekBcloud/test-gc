@@ -8,7 +8,7 @@ const PersonDetails = ({
   updatePersonData,
 }) => {
   return (
-    <div className="h-full">
+    <div className="">
       <div className="max-h-72 h-full overflow-y-scroll py-1">
         {personList.map((person, idx) => (
           <div className="py-4 text-sm" key={person.id}>
@@ -16,6 +16,7 @@ const PersonDetails = ({
               Person {idx + 1}
               {idx !== 0 && (
                 <button
+                  type="button"
                   onClick={() => handlePersonDelete(person)}
                   className="flex hover:bg-gray-200 ml-2"
                 >
@@ -28,7 +29,7 @@ const PersonDetails = ({
                 </button>
               )}
             </div>
-            <div className="px-4">
+            <div className="px-1 md:px-4">
               <input
                 id={`person-${person.id}`}
                 type="text"
@@ -40,7 +41,7 @@ const PersonDetails = ({
                   updatePersonData(person, "name", e.target.value);
                 }}
               />
-              <div className="grid sm:grid-cols-2 ">
+              <div className="grid  grid-cols-1 sm:grid-cols-2 ">
                 <input
                   required
                   type="number"
@@ -60,6 +61,7 @@ const PersonDetails = ({
                         ? "bg-gray-500 text-white"
                         : "bg-white"
                     }`}
+                    type="button"
                     onClick={() => updatePersonData(person, "gender", "Male")}
                   >
                     Male
@@ -70,6 +72,7 @@ const PersonDetails = ({
                         ? "bg-gray-500 text-white"
                         : "bg-white"
                     }`}
+                    type="button"
                     onClick={() => updatePersonData(person, "gender", "Female")}
                   >
                     Female

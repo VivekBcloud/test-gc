@@ -25,7 +25,7 @@ const RoomCards = ({ roomDetails, hotelName }) => {
 
         <span className="text-sm">night</span>
       </div>
-      <div className="flex justify-between">
+      <div className="flex flex-wrap gap-3">
         <ViewFacilityModal roomDetails={roomDetails} hotelName={hotelName} />
         <HotelBookingModal roomDetails={roomDetails} hotelName={hotelName} />
       </div>

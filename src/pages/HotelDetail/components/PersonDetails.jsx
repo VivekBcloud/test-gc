@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CloseIcon, DeleteIcon } from "./SvgIcons";
+import { CloseIcon, DeleteIcon } from "../../../components/SvgIcons";
 
 const PersonDetails = ({
   personList,
@@ -54,9 +54,9 @@ const PersonDetails = ({
                 />
 
                 {/* Gender Toggle */}
-                <div className="ml-auto flex items-center  rounded ">
+                <div className="ml-auto flex items-center  rounded">
                   <button
-                    className={`px-4 py-2 border border-collapse border-gray-500 ${
+                    className={`px-2 sm:px-3 py-2 border border-collapse border-gray-500 ${
                       person?.gender === "Male"
                         ? "bg-gray-500 text-white"
                         : "bg-white"
@@ -67,7 +67,7 @@ const PersonDetails = ({
                     Male
                   </button>
                   <button
-                    className={`px-4 py-2 border border-collapse border-gray-500 ${
+                    className={`px-2 sm:px-3 py-2 border border-collapse border-gray-500 ${
                       person?.gender === "Female"
                         ? "bg-gray-500 text-white"
                         : "bg-white"

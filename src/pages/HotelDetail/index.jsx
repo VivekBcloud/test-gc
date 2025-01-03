@@ -1,29 +1,36 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router";
-import { fetchHotelDetails } from "../services";
-import RoomCards from "../components/RoomCards";
+import { fetchHotelDetails } from "../../services";
+import Loading from "../../components/Loading";
 import {
   ArrowLongLeftIcon,
   LocationIcon,
   SolidStarIcon,
-} from "../components/SvgIcons";
+} from "../../components/SvgIcons";
+import RoomCards from "./components/RoomCards";
 
 const HotelDetails = () => {
   const { hotelId } = useParams();
   const [details, setDetails] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       // Fetch hotel details from API
       try {
+        setIsLoading(true);
         const data = await fetchHotelDetails(hotelId);
         setDetails(data);
       } catch (err) {
         console.error("Error fetching hotel details:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
   }, [hotelId]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>

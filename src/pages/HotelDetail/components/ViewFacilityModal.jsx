@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import PersonDetails from "./PersonDetails";
-import { ArrowLongRightIcon, CloseIcon } from "./SvgIcons";
+import { ArrowLongRightIcon, CloseIcon } from "../../../components/SvgIcons";
 
 const ViewFacilityModal = ({ roomDetails, hotelName = "" }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { amendities } = roomDetails;
+  const { amenities } = roomDetails;
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -17,7 +16,7 @@ const ViewFacilityModal = ({ roomDetails, hotelName = "" }) => {
     <>
       <button
         onClick={openModal}
-        className=" flex items-center justify-center min-w-fit gap-2 flex-1 p-2  border border-blue-500 text-blue-500 rounded hover:border-blue-600 hover:text-blue-600text-sm"
+        className=" flex items-center justify-center min-w-fit gap-2 flex-1 p-2  border border-blue-500 text-blue-500 rounded hover:border-blue-600 hover:text-blue-600 text-sm"
       >
         View Facilities
         <ArrowLongRightIcon />
@@ -31,7 +30,7 @@ const ViewFacilityModal = ({ roomDetails, hotelName = "" }) => {
               <div>
                 {hotelName}
                 {" > "}
-                <span className="text-2xl">{roomDetails.name}</span>
+                <span className="text-2xl">{roomDetails?.name}</span>
               </div>
               <div>
                 <button
@@ -42,12 +41,12 @@ const ViewFacilityModal = ({ roomDetails, hotelName = "" }) => {
                 </button>
               </div>
             </div>
-            <div className="flex gap-4 flex-wrap">
-              {Array.isArray(roomDetails.amenities) &&
-                roomDetails.amenities?.map((amenity) => (
+            <div className="flex gap-4 flex-wrap py-8">
+              {Array.isArray(amenities) &&
+                amenities?.map((amenity) => (
                   <div
                     key={amenity}
-                    className="p-6 border border-blue-500  rounded text-blue-500 flex justify-center items-center text-center"
+                    className="p-6 border-2 border-blue-500  rounded text-blue-500 flex justify-center items-center text-center hover:shadow-md  hover:shadow-blue-500 transition-shadow"
                   >
                     {amenity}
                   </div>
@@ -58,7 +57,7 @@ const ViewFacilityModal = ({ roomDetails, hotelName = "" }) => {
               <div>
                 <button
                   onClick={closeModal}
-                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-500"
+                  className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500 transition"
                 >
                   Close
                 </button>

@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import clsx from "clsx";
-import { fetchHotelNames } from "../services";
-import { LocationIcon, SearchIcon, UsersIcon } from "./SvgIcons";
-import { useToast } from "../App";
+import { fetchHotelNames } from "../../../services";
+import {
+  LocationIcon,
+  SearchIcon,
+  UsersIcon,
+} from "../../../components/SvgIcons";
+import { useToast } from "../../../App";
 function checkForErrorPresent(errorCode, codeList) {
   if (codeList.length) {
     const error = codeList.find((code) => code === errorCode);
@@ -94,8 +98,8 @@ const SearchHotel = () => {
       return;
     }
     params.set("checkinPersonCount", checkinPersonCount);
-    params.set("checkinDate", checkInDate);
-    params.set("checkoutDate", checkOutDate);
+    params.set("checkinDate", new Date(checkInDate).toLocaleDateString());
+    params.set("checkoutDate", new Date(checkOutDate).toLocaleDateString());
 
     navigate(`/hoteldetails/${selectedOption}?${params.toString()}`);
   };
@@ -167,16 +171,49 @@ const SearchHotel = () => {
           type="date"
           id="check-in-date"
           className="focus:outline-none focus:ring focus:ring-blue-300"
+          value={checkInDate}
           onChange={(e) => {
             const value = e.target.value;
-            setCheckInDate(value);
+            if (!checkOutDate) {
+              setCheckInDate(value);
+              setCheckOutDate(value);
+            } else {
+              const startDate = new Date(value).getTime();
+              const endDate = new Date(checkOutDate).getTime();
+              if (endDate < startDate) {
+                showToast(
+                  "Check-in date should be before check-out date",
+                  "error"
+                );
+              } else {
+                setCheckInDate(value);
+              }
+            }
           }}
         />
         <input
           type="date"
           id="check-out-date"
           className="focus:outline-none focus:ring focus:ring-blue-300"
-          onChange={(e) => setCheckOutDate(e.target.value)}
+          value={checkOutDate}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (!checkInDate) {
+              setCheckInDate(value);
+              setCheckOutDate(value);
+            } else {
+              const startDate = new Date(checkInDate).getTime();
+              const endDate = new Date(value).getTime();
+              if (endDate < startDate) {
+                showToast(
+                  "Check-out date should be after check-in date",
+                  "error"
+                );
+              } else {
+                setCheckOutDate(value);
+              }
+            }
+          }}
         />
       </div>
       <div

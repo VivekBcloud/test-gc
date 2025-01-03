@@ -1,5 +1,5 @@
+import clsx from "clsx";
 import React, { useState } from "react";
-import "./Navbar.css";
 import { Link } from "react-router";
 
 const Navbar = () => {
@@ -43,8 +43,15 @@ const Navbar = () => {
 
         {/* Mobile Menu Toggle */}
         <div className="flex-grow">
-          <button className="menu-toggle ml-auto " onClick={toggleMobileMenu}>
-            ☰
+          {/* <button className="menu-toggle ml-auto ">☰</button> */}
+          <button
+            className={clsx(
+              "menu-toggle ml-auto h-8",
+              isMobileMenuOpen ? "menu-open" : ""
+            )}
+            onClick={toggleMobileMenu}
+          >
+            <span className="hamburger"></span>
           </button>
         </div>
       </div>

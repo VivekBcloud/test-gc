@@ -1,11 +1,11 @@
 import React from "react";
-import ImageCarousel from "./ImageCarousel";
+import ImageCarousel from "../../../components/ImageCarousel";
 import HotelBookingModal from "./BookingModal";
-import { UsersIcon } from "./SvgIcons";
+import { UsersIcon } from "../../../components/SvgIcons";
 import ViewFacilityModal from "./ViewFacilityModal";
 
 const RoomCards = ({ roomDetails, hotelName }) => {
-  console.log("roomdata", roomDetails);
+  // console.log("roomdata", roomDetails);
   return (
     <div className="p-4 border rounded border-gray-300">
       <ImageCarousel images={roomDetails?.image_urls} />

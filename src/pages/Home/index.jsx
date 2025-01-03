@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "./styles.css";
-import SearchHotel from "../../components/SearchHotel";
-import HotelCards from "../../components/HotelCards";
+import SearchHotel from "./components/SearchHotel";
 import { fetchHotels, getPriceRanges } from "../../services";
 import PaginationComponent from "../../components/Pagination";
 import { CloseIcon } from "../../components/SvgIcons";
+import FilterBox from "./components/FilterBox";
+import HotelCardList from "./components/HotelCardList";
+import { useToast } from "../../App";
+import HotelSorter from "./components/HotelSorter";
 
 const filterPriceOptions = [
   {
@@ -65,66 +67,21 @@ const filterRatingOptions = [
   },
 ];
 
-const FilterBox = ({
-  filterHeading,
-  filterOptions,
-  addToAppliedFilterList,
-  removeFromAppliedFilters,
-  appliedFilters,
-}) => {
-  return (
-    <div className="py-2">
-      <div className="py-2">{filterHeading}</div>
-      <div className="text-sm">
-        {Array.isArray(filterOptions) &&
-          filterOptions.map((option) => {
-            const isChecked = appliedFilters.find((item) => option == item);
-            return (
-              <div
-                key={option?.label}
-                className="py-2 flex items-center gap-1 transition-all hover:font-semibold"
-              >
-                <input
-                  type="checkbox"
-                  name={option?.label}
-                  id={`price-range-${option?.label}`}
-                  checked={isChecked}
-                  className="w-4 h-4 text-blue-500 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1 "
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      addToAppliedFilterList(option);
-                    } else {
-                      removeFromAppliedFilters(option);
-                    }
-                  }}
-                />
-                <label
-                  htmlFor={`price-range-${option?.label}`}
-                  className="w-full"
-                >
-                  {option.label}
-                </label>
-              </div>
-            );
-          })}
-      </div>
-    </div>
-  );
-};
-
 const Home = () => {
   const [appliedFilters, setAppliedFilters] = useState([]);
   const [hotelList, setHotelList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   // Get current items
   const itemsPerPage = 9;
   const startIdx = (currentPage - 1) * itemsPerPage;
-
+  const { showToast } = useToast();
   useEffect(() => {
     const fetchData = async () => {
       // Fetch hotel details from API
       try {
+        setIsLoading(true);
         const data = await fetchHotels({ page: 1, size: 30 });
         console.log("data", data);
         if (Array.isArray(data)) {
@@ -135,7 +92,10 @@ const Home = () => {
           setHotelList(hotelListWithPrice);
         }
       } catch (err) {
+        showToast("Failed to get hotel list", "error");
         console.error("Error fetching hotel details:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
@@ -150,20 +110,18 @@ const Home = () => {
     [hotelList]
   );
 
-  console.log("filterLocationOptions", filterLocationOptions);
-  console.log("appliedFilters", appliedFilters);
   const filteredHotels = hotelList
     .filter((hotel) => {
       if (appliedFilters.length) {
         return appliedFilters.some((filter) => {
-          if (filter.filterType === "city") {
-            return hotel.city === filter.label;
+          if (filter?.filterType === "city") {
+            return hotel?.city === filter.label;
           } else if (filter.filterType === "price") {
-            return (
-              hotel.lowestPrice >= filter.lowest &&
-              hotel.lowestPrice <= filter.highest
+            return hotel?.rooms?.some(
+              (room) =>
+                room?.price >= filter.lowest && room?.price <= filter.highest
             );
-          } else if (filter.filterType === "rating") {
+          } else if (filter?.filterType === "rating") {
             return (
               hotel.rating >= filter.lowest && hotel.rating <= filter.highest
             );
@@ -294,28 +252,12 @@ const Home = () => {
           </div>
           {/* hotel list */}
           <div className="p-4">
-            <div className="flex justify-end mb-4">
-              <select
-                name="sort by"
-                className="p-2 self-end overflow-hidden border border-gray-300"
-                onClick={(e) => setSortBy(e.target.value)}
-              >
-                <option value="">Sort By</option>
-                <option value="price low to high">Price low to high</option>
-                <option value="price high to low">Price high to low</option>
-                <option value="rating low to high">Rating low to high</option>
-                <option value="rating high to low">Rating high to low</option>
-              </select>
-            </div>
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 ">
-              {filteredPaginatedHotels.length > 0 ? (
-                filteredPaginatedHotels.map((item) => (
-                  <HotelCards key={item?.id} details={item} />
-                ))
-              ) : (
-                <div className="py-5">No results found</div>
-              )}
-            </div>
+            <HotelSorter setSortBy={setSortBy} />
+            <HotelCardList
+              filteredPaginatedHotels={filteredPaginatedHotels}
+              isLoading={isLoading}
+              currentPage={currentPage}
+            />
             <PaginationComponent
               totalItems={filteredHotels.length}
               itemsPerPage={itemsPerPage}

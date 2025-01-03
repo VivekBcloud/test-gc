@@ -1,10 +1,11 @@
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router";
-import HotelDetails from "./pages/HotelDetails";
+import HotelDetails from "./pages/HotelDetail";
 import "./App.css";
 import { createContext, useContext, useState } from "react";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Create a context for the toast
 const ToastContext = createContext();
@@ -54,6 +55,8 @@ export const useToast = () => useContext(ToastContext);
 function App() {
   return (
     <ToastProvider>
+      <ScrollToTop />
+
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

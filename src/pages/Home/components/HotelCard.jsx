@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
-import { ArrowLongRightIcon, SolidStarIcon } from "./SvgIcons";
+import {
+  ArrowLongRightIcon,
+  SolidStarIcon,
+} from "../../../components/SvgIcons";
 
-const HotelCards = ({ details }) => {
+const HotelCard = ({ details }) => {
   return (
     <div className="p-4 border border-gray-300 rounded-sm">
       <img
@@ -36,4 +39,4 @@ const HotelCards = ({ details }) => {
   );
 };
 
-export default HotelCards;
+export default HotelCard;

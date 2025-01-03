@@ -1,16 +1,16 @@
-import React, { forwardRef, useState } from "react";
-import PersonDetails from "./PersonDetails";
+import React, { useState } from "react";
+
+import { useLocation } from "react-router";
+import { useToast } from "../../../App";
 import {
   ArrowLongRightIcon,
   CheckInCalenderIcon,
   CheckOutCalenderIcon,
   CloseIcon,
   UsersIcon,
-} from "./SvgIcons";
-import ImageCarousel from "./ImageCarousel";
-import { useParams } from "react-router";
-import { useLocation } from "react-router";
-import { useToast } from "../App";
+} from "../../../components/SvgIcons";
+import ImageCarousel from "../../../components/ImageCarousel";
+import PersonDetails from "./PersonDetails";
 
 const HotelBookingModal = ({ roomDetails, hotelName = "" }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,7 +90,7 @@ const HotelBookingModal = ({ roomDetails, hotelName = "" }) => {
               <div>
                 {hotelName}
                 {" > "}
-                <span className="text-2xl">{roomDetails.name}</span>
+                <span className="text-2xl">{roomDetails?.name}</span>
               </div>
               <div>
                 <button
@@ -141,13 +141,21 @@ const HotelBookingModal = ({ roomDetails, hotelName = "" }) => {
                         {personList.length ? personList.length : ""}
                       </div>
 
-                      <div className="text-blue-500">{checkInDate ?? ""}</div>
+                      <div className="text-blue-500">
+                        {checkInDate
+                          ? new Date(checkInDate).toLocaleDateString()
+                          : ""}
+                      </div>
 
-                      <div className="text-blue-500">{checkOutDate ?? ""}</div>
+                      <div className="text-blue-500">
+                        {checkOutDate
+                          ? new Date(checkOutDate).toLocaleDateString()
+                          : ""}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <form className="md:pl-4 " onSubmit={handleSubmit}>
+                <form className="md:pl-4 flex flex-col" onSubmit={handleSubmit}>
                   <div className="flex  flex-wrap justify-center border gap-2 rounded px-2 py-2 shadow-sm bg-white border-gray-500 w-fit mx-auto">
                     <input
                       type="date"
@@ -157,7 +165,21 @@ const HotelBookingModal = ({ roomDetails, hotelName = "" }) => {
                       value={checkInDate}
                       onChange={(e) => {
                         const value = e.target.value;
-                        setCheckInDate(value);
+                        if (!checkOutDate) {
+                          setCheckInDate(value);
+                          setCheckOutDate(value);
+                        } else {
+                          const startDate = new Date(value).getTime();
+                          const endDate = new Date(checkOutDate).getTime();
+                          if (endDate < startDate) {
+                            showToast(
+                              "Check-in date should be before check-out date",
+                              "error"
+                            );
+                          } else {
+                            setCheckInDate(value);
+                          }
+                        }
                       }}
                     />
                     <input
@@ -166,7 +188,24 @@ const HotelBookingModal = ({ roomDetails, hotelName = "" }) => {
                       id="check-out-date"
                       className="focus:outline-none focus:ring focus:ring-blue-300 text-sm flex-1"
                       value={checkOutDate}
-                      onChange={(e) => setCheckOutDate(e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (!checkInDate) {
+                          setCheckInDate(value);
+                          setCheckOutDate(value);
+                        } else {
+                          const startDate = new Date(checkInDate).getTime();
+                          const endDate = new Date(value).getTime();
+                          if (endDate < startDate) {
+                            showToast(
+                              "Check-out date should be after check-in date",
+                              "error"
+                            );
+                          } else {
+                            setCheckOutDate(value);
+                          }
+                        }
+                      }}
                     />
                   </div>
 
